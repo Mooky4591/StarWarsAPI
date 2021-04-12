@@ -42,6 +42,7 @@ public class ListActivity extends AppCompatActivity implements MyAdapter.OnChara
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list);
         getSupportActionBar().hide();
+        list.clear();
         listqueue = Volley.newRequestQueue(this);
 
         myrecyclerview = findViewById(R.id.characterlist);

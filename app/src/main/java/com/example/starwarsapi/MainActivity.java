@@ -44,6 +44,7 @@ public class MainActivity extends AppCompatActivity {
                 mp.start();
                 Intent intent = new Intent(getApplicationContext(), ListActivity.class);
                 startActivity(intent);
+
             });
     }
 
