@@ -10,61 +10,94 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.android.volley.DefaultRetryPolicy;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 
 public class ListActivity extends AppCompatActivity implements MyAdapter.OnCharacterListener {
 
-    Button generatelistbutton;
     private RecyclerView myrecyclerview;
     private RecyclerView.Adapter myadapter;
     private RecyclerView.LayoutManager mylayoutmanager;
+    static RequestQueue listqueue;
+    static final private String url = "https://swapi.dev/api/people/";
 
-    ArrayList<RecyclerItem> list = new ArrayList<>();
+    static ArrayList<RecyclerItem> list = new ArrayList<>();
 
 
-    final private String url = "https://swapi.dev/api/people/?format=wookiee";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list);
         getSupportActionBar().hide();
+        listqueue = Volley.newRequestQueue(this);
 
-        generatelistbutton = findViewById(R.id.displaylist);
-
-        myadapter = new MyAdapter(list, this);
-        mylayoutmanager = new LinearLayoutManager(getApplicationContext());
         myrecyclerview = findViewById(R.id.characterlist);
-        myrecyclerview.setHasFixedSize(true);
-        myrecyclerview.setLayoutManager(mylayoutmanager);
-        myrecyclerview.setAdapter(myadapter);
+        myadapter = new MyAdapter(list, this);
 
-
-        list.add(new RecyclerItem("Han Solo",
-                "Height: 6ft",
-                "Weight: 210lbs",
-                "Birth Year: 1960",
-                "Eye color: Blue"));
-        list.add(new RecyclerItem("Luke Skywalker",
-                "Height: 5ft 11in",
-                "Weight: 190lbs",
-                "Birth Year: 1963",
-                "Eye color: Green"));
-        list.add(new RecyclerItem("C3P0",
-                "Height: 6ft",
-                "Weight: 450lbs",
-                "Birth Year: 1940",
-                "Eye color: Yellow"));
-        list.add(new RecyclerItem("Darth Maul",
-                "Height: 6ft 2in",
-                "Weight: 205lbs",
-                "Birth Year: 1942",
-                "Eye color: Red"));
+        parseJsonData();
     }
+
+    public void parseJsonData(){
+    JsonObjectRequest request = new JsonObjectRequest(
+            Request.Method.GET,
+            url, null,
+            new Response.Listener<JSONObject>() {
+                @Override
+                public void onResponse(JSONObject response) {
+
+                    try {
+                        JSONArray jsonarray = response.getJSONArray("results");
+                        for (int i = 0; i < jsonarray.length(); i++) {
+                            JSONObject jsonobject = jsonarray.getJSONObject(i);
+
+                            String name = jsonobject.getString("name");
+                            String height = jsonobject.getString("height");
+                            String mass = jsonobject.getString("mass");
+                            String eyecolor = jsonobject.getString("eye_color");
+                            String birthyear = jsonobject.getString("birth_year");
+
+                            list.add(new RecyclerItem(name, "Height: " + height, "Mass: " + mass, "Birth Year: " + birthyear, eyecolor));
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                    myrecyclerview.setAdapter(myadapter);
+                    myrecyclerview.setHasFixedSize(true);
+                    mylayoutmanager = new LinearLayoutManager(getApplicationContext());
+                    myrecyclerview.setLayoutManager(mylayoutmanager);
+
+                }
+
+            }, new Response.ErrorListener() {
+        @Override
+        public void onErrorResponse(VolleyError error) {
+            error.printStackTrace();
+        }
+    });
+
+        listqueue.add(request);
+
+    }
+
 
     @Override
     public void onCharacterClick(int position) {
         String color = list.get(position).getEyecolor();
         Toast.makeText(getApplicationContext(), color, Toast.LENGTH_SHORT).show();
     }
+
 }

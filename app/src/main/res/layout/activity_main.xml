@@ -4,8 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@mipmap/hyperspace_foreground"
     tools:context=".MainActivity"
-    android:background="@mipmap/hyperspace_foreground">
+    >
 
     <Button
         android:id="@+id/displaylist"
@@ -17,7 +18,7 @@
         android:layout_marginBottom="342dp"
         android:text="Make the jump to hyperspace!"
         android:textColor="#CA950E"
-        android:textSize="20dp"
+        android:textSize="20sp"
         android:theme="@style/Platform.MaterialComponents"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
