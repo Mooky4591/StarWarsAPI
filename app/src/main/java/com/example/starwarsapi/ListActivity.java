@@ -97,7 +97,7 @@ public class ListActivity extends AppCompatActivity implements MyAdapter.OnChara
     @Override
     public void onCharacterClick(int position) {
         String color = list.get(position).getEyecolor();
-        Toast.makeText(getApplicationContext(), color, Toast.LENGTH_SHORT).show();
+        Toast.makeText(getApplicationContext(), "Eye color: " + color, Toast.LENGTH_SHORT).show();
     }
 
 }

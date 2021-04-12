@@ -29,23 +29,22 @@ public class MainActivity extends AppCompatActivity {
 
     Button generatelist;
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         getSupportActionBar().hide();
 
+        final MediaPlayer mp = MediaPlayer.create(this, R.raw.lightsaber);
+
         generatelist = findViewById(R.id.displaylist);
 
-        generatelist.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        generatelist.setOnClickListener((View v) ->{
+
+                mp.start();
                 Intent intent = new Intent(getApplicationContext(), ListActivity.class);
                 startActivity(intent);
-            }
-        });
+            });
     }
 
 }
