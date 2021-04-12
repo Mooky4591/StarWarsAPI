@@ -70,7 +70,7 @@ public class ListActivity extends AppCompatActivity implements MyAdapter.OnChara
                             String eyecolor = jsonobject.getString("eye_color");
                             String birthyear = jsonobject.getString("birth_year");
 
-                            list.add(new RecyclerItem(name, "Height: " + height, "Mass: " + mass, "Birth Year: " + birthyear, eyecolor));
+                            list.add(new RecyclerItem(name, "Height: " + height + " cm", "Mass: " + mass + " kg", "Birth Year: " + birthyear, eyecolor));
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
